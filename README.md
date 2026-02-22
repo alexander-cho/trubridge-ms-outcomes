@@ -1,6 +1,6 @@
 # Health Outcomes and Social Determinants
 
-### How are broadband access and socioeconomic vulnerability associated with diabetes prevalence across rural census tracts in Mississippi?
+### How do the dual barriers of limited transportation mobility and digital connectivity correlate with predicted 'No-Show' risks and associated financial losses for rural health centers managing high-diabetes populations across Mississippi census tracts?
 
 
 Run FastAPI server (from repo root):
