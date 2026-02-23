@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 
-class CdcOutcome(BaseModel):
+class CdcPlacesOutcome(BaseModel):
     stateabbr: str
     statedesc: str
     countyname: str

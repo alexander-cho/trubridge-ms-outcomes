@@ -1,0 +1,11 @@
+services:
+  db:
+    image: postgres:18.2-alpine3.22
+    container_name: trubridge-ms-outcomes-db
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=trubridge-ms-outcomes-db
+    ports:
+      - "5430:5432"
