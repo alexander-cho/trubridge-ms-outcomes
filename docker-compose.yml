@@ -1,18 +1,6 @@
 services:
 
-  api:
-    container_name: trubridge-ms-outcomes
-    environment:
-      - DEV_DB_CONNECTION_STRING=postgresql://postgres:postgres@db:5432/trubridge-ms-outcomes-db
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "8000:80"
-    depends_on:
-      - db
-
-  db:
+  sql:
     image: postgres:18.2-alpine3.22
     container_name: trubridge-ms-outcomes-db
     restart: always
@@ -22,3 +10,31 @@ services:
       - POSTGRES_DB=trubridge-ms-outcomes-db
     ports:
       - "5430:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  api:
+    container_name: trubridge-ms-outcomes-api
+    environment:
+      - DB_CONNECTION_STRING=postgresql://postgres:postgres@sql:5432/trubridge-ms-outcomes-db
+    build:
+      context: api
+      dockerfile: api.Dockerfile
+    ports:
+      - "8000:80"
+    depends_on:
+      - sql
+
+  web-app:
+    container_name: trubridge-ms-outcomes-webapp
+    build:
+      context: web
+      dockerfile: web.Dockerfile
+    ports:
+      - "3010:80"
+    depends_on:
+      - api
+
+
+volumes:
+  postgres_data:

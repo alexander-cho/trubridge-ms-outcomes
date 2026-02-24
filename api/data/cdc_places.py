@@ -32,11 +32,12 @@ def get_census_tract_data() -> list[CdcPlacesOutcome] | None:
         print(e)
 
 
-async def insert_cdc_data():
+def insert_cdc_data():
     census_tract_data = get_census_tract_data()
     with Session(engine) as session:
         for outcome in census_tract_data:
             health_outcome = HealthOutcome(
+                year = outcome.year,
                 state_abbr = outcome.stateabbr,
                 state_desc = outcome.statedesc,
                 county_name = outcome.countyname,

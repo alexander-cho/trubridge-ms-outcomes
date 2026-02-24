@@ -2,6 +2,7 @@ from pydantic import BaseModel
 
 
 class CdcPlacesOutcome(BaseModel):
+    year: str
     stateabbr: str
     statedesc: str
     countyname: str

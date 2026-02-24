@@ -11,7 +11,7 @@ from models.health_outcome import HealthOutcome
 
 
 @asynccontextmanager
-async def lifespan(_: FastAPI):
+async def lifespan(_app: FastAPI):
     # seed only if HealthOutcomes table is empty
     with Session(engine) as session:
         result = session.execute(select(HealthOutcome).limit(1))
@@ -20,7 +20,8 @@ async def lifespan(_: FastAPI):
         if exists:
             pass
         else:
-            await insert_cdc_data()
+            insert_cdc_data()
+
     yield
 
 
@@ -40,12 +41,12 @@ app.add_middleware(
 )
 
 
-@app.get("/")
+@app.get("/api")
 async def main():
-    return {"message": "Hello World"}
+    return {"message": "Hello from TruBridge MS Outcomes"}
 
 
-@app.get("/tracts")
+@app.get("/api/tracts")
 async def census_tract(state_abbr: str):
     with Session(engine) as session:
         statement = (

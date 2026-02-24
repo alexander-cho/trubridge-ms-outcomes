@@ -1,3 +1,5 @@
+from typing import Optional
+
 from sqlalchemy import String, Float, Integer
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
@@ -11,6 +13,7 @@ class Base(DeclarativeBase):
 class HealthOutcome(Base):
     __tablename__ = "health_outcome"
     id: Mapped[int] = mapped_column(primary_key=True)
+    year: Mapped[str] = mapped_column(String(5))
     state_abbr: Mapped[str] = mapped_column(String(2))
     state_desc: Mapped[str] = mapped_column(String(30))
     county_name: Mapped[str] = mapped_column(String(30))
