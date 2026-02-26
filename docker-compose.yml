@@ -1,13 +1,14 @@
 services:
 
   sql:
-    container_name: db
+    container_name: trubridge-db
     build:
-      context: api
+      context: db
       dockerfile: db.Dockerfile
-    platform: linux/x86_64
+    platform: linux/amd64
     restart: always
     environment:
+      - PGUSER=postgres
       - POSTGRES_DB=trubridge-ms-outcomes-db
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -17,7 +18,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   api:
-    container_name: api
+    container_name: trubridge-api
     environment:
       - DB_CONNECTION_STRING=postgresql://postgres:postgres@sql:5432/trubridge-ms-outcomes-db
     build:
@@ -29,7 +30,7 @@ services:
       - sql
 
   webapp:
-    container_name: webapp
+    container_name: trubridge-webapp
     build:
       context: web
       dockerfile: web.Dockerfile
@@ -39,7 +40,7 @@ services:
       - api
 
   pgadmin:
-    container_name: pgadmin
+    container_name: trubridge-pgadmin
     image: dpage/pgadmin4:9.12.0
     restart: always
     ports:

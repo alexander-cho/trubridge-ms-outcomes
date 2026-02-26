@@ -3,11 +3,11 @@
 https://www.reddit.com/r/Python/comments/1odk7pl/comment/nkuwjcm/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
 
 
-## Running FastAPI and React app in separate containers
+## Running FastAPI and React app in separate Docker containers
 
 https://vardhmanandroid2015.medium.com/beginners-guide-for-containerizing-application-deploying-a-full-stack-fastapi-and-react-app-001f2cac08a8
 
-- Use nginx as a reverse proxy to direct all requests to /api
+- Use nginx as a reverse proxy to direct all web requests to /api
 - Difference/caveat: prefix all FastAPI routes with "/api" for it to work; example doesn't do this I believe, but another example on GitHub does this
 
 

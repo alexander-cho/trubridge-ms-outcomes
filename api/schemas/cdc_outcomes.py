@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 
-class CdcPlacesOutcome(BaseModel):
+class CdcPlacesOutcomeResponse(BaseModel):
     year: str
     stateabbr: str
     statedesc: str

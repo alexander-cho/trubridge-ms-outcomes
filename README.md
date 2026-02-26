@@ -8,10 +8,37 @@ Clone the GitHub repository.
 
 #### To run this application with docker
 
-Make sure you have docker installed locally. Then, from the repository root run the command: `docker compose up -d`
+Make sure you have docker installed locally. Then, from the repository root run the command:
+```shell
+docker compose up -d
+```
 
-Once all containers are created: head to:
-`http://localhost:3010`
+Once all containers are created: head to: `http://localhost:3010`
+
+Getting the shapefiles data into the PostGIS database. This will likely become a script to run automatically.
+
+From the terminal, or skip first command if going from Docker container exec:
+```shell
+docker exec -it trubridge-db sh
+```
+Install `unzip` for Debian-based container image
+```shell
+apt-get update && apt-get install -y unzip
+```
+Unzip
+```shell
+unzip tmp/tl_2025_28_tract.zip
+```
+Output shapefile to sql script using shp2pgsql shapefile loader, specifying table name
+```shell
+shp2pgsql -c -D -s 4269 -i -I tl_2025_28_tract.shp public.ms_tracts > mstracts.sql
+```
+Run sql script against db
+```shell
+psql -U postgres -d trubridge-ms-outcomes-db -f mstracts.sql
+```
+
+To exit the Docker shell: `Ctrl(^) + P` then `Ctrl(^) + Q`
 
 #### Run this application locally for development
 
@@ -30,7 +57,7 @@ docker run -d \
 -e POSTGRES_PASSWORD=postgres \
 -e POSTGRES_DB=trubridge-ms-outcomes-dev-db \
 -p 5429:5432 \
-postgis/postgis:17-3.5
+postgis/postgis:17-3.5 <CHANGE IMAGE>
 ```
 
 From the repository root, change directories into the Api with the following command: `cd api`

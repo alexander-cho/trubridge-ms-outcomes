@@ -9,7 +9,7 @@ class Base(DeclarativeBase):
 
 
 class HealthOutcome(Base):
-    __tablename__ = "health_outcome"
+    __tablename__ = "health_outcomes"
     id: Mapped[int] = mapped_column(primary_key=True)
     year: Mapped[str] = mapped_column(String(5))
     state_abbr: Mapped[str] = mapped_column(String(2))

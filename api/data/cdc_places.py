@@ -7,12 +7,12 @@ from sqlalchemy.orm import Session
 
 from data.database import engine
 from models.health_outcome import HealthOutcome
-from schemas.cdc_outcomes import CdcPlacesOutcome
+from schemas.cdc_outcomes import CdcPlacesOutcomeResponse
 
 load_dotenv()
 
 
-def get_census_tract_data() -> list[CdcPlacesOutcome] | None:
+def get_census_tract_data() -> list[CdcPlacesOutcomeResponse] | None:
     url = "https://data.cdc.gov/resource/cwsq-ngmh.json"
     params = {
         "$limit": 50000,
@@ -25,7 +25,7 @@ def get_census_tract_data() -> list[CdcPlacesOutcome] | None:
     res = requests.get(url, params=params, headers=headers).json()
 
     try:
-        ta = TypeAdapter(list[CdcPlacesOutcome])
+        ta = TypeAdapter(list[CdcPlacesOutcomeResponse])
         validated_res = ta.validate_python(res)
         return validated_res
     except ValidationError as e:
