@@ -1,5 +1,3 @@
-from typing import Optional
-
 from sqlalchemy import String, Float, Integer
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
