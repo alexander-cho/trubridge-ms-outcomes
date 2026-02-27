@@ -27,11 +27,11 @@ apt-get update && apt-get install -y unzip
 ```
 Unzip
 ```shell
-unzip tmp/tl_2025_28_tract.zip
+unzip /tmp/data/tl_2025_28_tract.zip -d /tmp/data/
 ```
-Output shapefile to sql script using shp2pgsql shapefile loader, specifying table name
+Output shapefile to SQL script using shp2pgsql shapefile loader, specifying table name
 ```shell
-shp2pgsql -c -D -s 4269 -i -I tl_2025_28_tract.shp public.ms_tracts > mstracts.sql
+shp2pgsql -c -D -s 4269 -i -I /tmp/data/tl_2025_28_tract.shp public.ms_tracts > mstracts.sql
 ```
 Run sql script against db
 ```shell
@@ -47,20 +47,22 @@ the most widely recommended methods being `pyenv` and `nvm` (node version manage
 
 ##### Set up supporting services and other requirements
 
-Since we are interacting with a relational database we need a PostgreSQL instance running and for that install Docker with `brew install docker` in the terminal, if you are on macOS. There are alternatives such as installing Postgres natively, using SQLite for dev environment, using a managed Postgres instance provisioned by AWS, Azure, Neon, etc., but Docker streamlines things for local development as well as gives us flexibility to mock and test production environments. After that run `docker -v` in the terminal to confirm the installation. Now run the following command to spin up a Postgres container:
-
+Since we are interacting with a relational database we need a PostgreSQL instance running and for that install Docker with `brew install docker` in the terminal, if you are on macOS. There are alternatives such as installing Postgres natively, using SQLite for dev environment, using a managed Postgres instance provisioned by AWS, Azure, Neon, etc., but Docker streamlines things for local development as well as gives us flexibility to mock and test production environments. After that run `docker -v` in the terminal to confirm the installation. Because many of the images seemingly do not ship with the shp2pgsql tool which we will need later, after some experimentation with different images from Docker hub, we use a slightly customized image. Run the following commands.
+From the repository root `cd` into the `db` directory, where the `db.Dockerfile` lies, then run the following commands:
 ```shell
+cd db &&
+docker build --platform linux/amd64 -f db.Dockerfile -t trubridge-postgis:latest . &&
 docker run -d \
---platform linux/x86_64 \
---name trubridge-ms-outcomes-dev-db \
--e POSTGRES_USER=postgres \
--e POSTGRES_PASSWORD=postgres \
--e POSTGRES_DB=trubridge-ms-outcomes-dev-db \
--p 5429:5432 \
-postgis/postgis:17-3.5 <CHANGE IMAGE>
+  --platform linux/amd64 \
+  --name trubridge-ms-outcomes-dev-db \
+  -e POSTGRES_USER=postgres \
+  -e POSTGRES_PASSWORD=postgres \
+  -e POSTGRES_DB=trubridge-ms-outcomes-dev-db \
+  -p 5429:5432 \
+  trubridge-postgis:latest
 ```
 
-From the repository root, change directories into the Api with the following command: `cd api`
+From the repository root, change directories into the Api with the following command: `cd api`. If you are in the `db` directory from the step before, run `cd ..` then `cd api`.
 
 Inside `api`, take a look at the `.env.example` for all the environment variables needed to run the application as intended. Create a `.env` file in the current directory. Copy and paste everything in `.env.example` into `.env`. For the host:container port mappings, i.e. `5429:5432` from the docker command above, you can change 5429 to anything that isn't already in use in your local system, but just be sure to change the port in the connection string in `.env` as `DB_CONNECTION_STRING=postgresql://postgres:postgres@localhost:<YOUR-PORT>/trubridge-ms-outcomes-dev-db` to match it.
 

@@ -8,7 +8,6 @@ services:
     platform: linux/amd64
     restart: always
     environment:
-      - PGUSER=postgres
       - POSTGRES_DB=trubridge-ms-outcomes-db
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres

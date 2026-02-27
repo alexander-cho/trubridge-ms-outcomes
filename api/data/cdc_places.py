@@ -6,8 +6,8 @@ from pydantic import TypeAdapter
 from sqlalchemy.orm import Session
 
 from data.database import engine
-from models.health_outcome import HealthOutcome
-from schemas.cdc_outcomes import CdcPlacesOutcomeResponse
+from schemas.health_outcome import HealthOutcome
+from dtos.cdc_outcomes import CdcPlacesOutcomeResponse
 
 load_dotenv()
 

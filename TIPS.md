@@ -20,3 +20,10 @@ when using `postgis/postgis:18-3.6-alpine`
 https://github.com/litsynp/postgis-import-shp-example?tab=readme-ov-file
 directs us to this issue
 https://gis.stackexchange.com/questions/384381/shp2pgsql-available-in-postgis13-3-1-alpine-but-no-in-postgis13-3-1-docker-ima
+
+
+## Run init DDL in Docker
+
+https://hub.docker.com/_/postgres ("Initialization Scripts" section)
+
+- Using this method for now instead of something like `alembic`
