@@ -1,32 +1,34 @@
+import os
 from contextlib import asynccontextmanager
 
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy import text
 
 from data.cdc_places import insert_cdc_data
-from data.database import engine
-from schemas.health_outcome import HealthOutcome
+from data.database import engine, wait_for_db
+
+load_dotenv()
 
 
-# @asynccontextmanager
-# async def lifespan(_app: FastAPI):
-#     # seed only if HealthOutcomes table is empty
-#     with Session(engine) as session:
-#         result = session.execute(select(HealthOutcome).limit(1))
-#         exists = result.scalar_one_or_none() is not None
-#
-#         if exists:
-#             pass
-#         else:
-#             insert_cdc_data()
-#
-#     yield
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    wait_for_db(os.getenv('DB_CONNECTION_STRING'))
+    # seed only if HealthOutcomes table is empty
+    with engine.connect() as connection:
+        statement = connection.execute(text("SELECT * FROM health_outcomes LIMIT 1"))
+        exists = statement.scalar_one_or_none() is not None
+
+        if exists:
+            pass
+        else:
+            insert_cdc_data()
+
+    yield
 
 
-# app = FastAPI(lifespan=lifespan)
-app = FastAPI()
+app = FastAPI(lifespan=lifespan)
 
 origins = [
     "http://localhost:5173",

@@ -1,9 +1,8 @@
 import os
 import time
 
-from sqlalchemy import create_engine, select
+from sqlalchemy import create_engine, text
 from dotenv import load_dotenv
-from sqlalchemy.orm import Session
 
 load_dotenv()
 
@@ -17,9 +16,8 @@ def wait_for_db(db_uri):
     up = False
     while not up:
         try:
-            with Session(_local_engine) as session:
-                session.execute(select().limit(1))
-                session.commit()
+            with engine.connect() as connection:
+                connection.execute(text("SELECT 1"))
         except Exception as err:
             print(f"Connection error: {err}")
             up = False
@@ -28,7 +26,5 @@ def wait_for_db(db_uri):
 
         time.sleep(2)
 
-
-wait_for_db(os.getenv('DB_CONNECTION_STRING'))
 
 engine = create_engine(os.getenv('DB_CONNECTION_STRING'))
