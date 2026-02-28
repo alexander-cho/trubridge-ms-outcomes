@@ -1,6 +1,11 @@
 from pydantic import BaseModel
 
 
+class Geolocation(BaseModel):
+    type: str
+    coordinates: list
+
+
 class CdcPlacesOutcomeResponse(BaseModel):
     year: str
     stateabbr: str
@@ -26,13 +31,3 @@ class CdcPlacesOutcomeResponse(BaseModel):
     measureid: str
     datavaluetypeid: str
     short_question_text: str
-
-
-class Geolocation(BaseModel):
-    type: str
-    coordinates: list
-
-
-# class Coordinates(BaseModel):
-#     longitude: float
-#     latitude: float

@@ -2,7 +2,7 @@ from pydantic import BaseModel
 
 
 class HealthOutcome(BaseModel):
-    # id: int
+    id: int
     year: str
     state_abbr: str
     state_desc: str

@@ -8,6 +8,7 @@ from sqlalchemy import text
 
 from data.cdc_places import insert_cdc_data
 from data.database import engine, wait_for_db
+from services.tracts import get_all_census_tracts
 
 load_dotenv()
 
@@ -15,6 +16,7 @@ load_dotenv()
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     wait_for_db(os.getenv('DB_CONNECTION_STRING'))
+
     # seed only if HealthOutcomes table is empty
     with engine.connect() as connection:
         statement = connection.execute(text("SELECT * FROM health_outcomes LIMIT 1"))
@@ -49,17 +51,7 @@ async def main():
     return {"message": "Hello from TruBridge MS Outcomes"}
 
 
-# @app.get("/api/tracts")
-# async def census_tract(state_abbr: str):
-#     with Session(engine) as session:
-#         statement = (
-#             select(HealthOutcome.census_tract_id)
-#             .where(HealthOutcome.state_abbr == state_abbr)
-#             .distinct()
-#         )
-#
-#         result = session.execute(statement)
-#
-#         tracts = result.scalars().all()
-#
-#     return tracts
+@app.get("/api/tracts")
+async def census_tract(state_abbr: str):
+    tracts = get_all_census_tracts(state_abbr)
+    return await tracts

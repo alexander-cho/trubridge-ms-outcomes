@@ -6,7 +6,7 @@
 
 Clone the GitHub repository.
 
-#### To run this application with docker
+# Run this application with docker
 
 Make sure you have docker installed locally. Then, from the repository root run the command:
 ```shell
@@ -40,7 +40,7 @@ psql -U postgres -d trubridge-ms-outcomes-db -f mstracts.sql
 
 To exit the Docker shell: `Ctrl(^) + P` then `Ctrl(^) + Q`
 
-#### Run this application locally for development
+# Run this application locally for development
 
 Make sure you have python 3.14 and node 24 installed locally (`.python-version`, `.node-version`). There are a number of ways to do this,
 the most widely recommended methods being `pyenv` and `nvm` (node version manager), respectively.
@@ -54,10 +54,10 @@ cd db &&
 docker build --platform linux/amd64 -f db.Dockerfile -t trubridge-postgis:latest . &&
 docker run -d \
   --platform linux/amd64 \
-  --name trubridge-ms-outcomes-dev-db \
+  --name trubridge-ms-outcomes-db-dev \
   -e POSTGRES_USER=postgres \
   -e POSTGRES_PASSWORD=postgres \
-  -e POSTGRES_DB=trubridge-ms-outcomes-dev-db \
+  -e POSTGRES_DB=trubridge-ms-outcomes-db-dev \
   -p 5429:5432 \
   trubridge-postgis:latest
 ```

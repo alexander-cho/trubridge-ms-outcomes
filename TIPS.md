@@ -27,3 +27,10 @@ https://gis.stackexchange.com/questions/384381/shp2pgsql-available-in-postgis13-
 https://hub.docker.com/_/postgres ("Initialization Scripts" section)
 
 - Using this method for now instead of something like `alembic`
+
+
+## A more efficient way to seed DB on startup
+
+https://trvrm.github.io/efficient-postgres-bulk-inserts-take-2.html
+
+- .
