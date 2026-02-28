@@ -1,8 +1,8 @@
 import './App.css';
 
 async function getData() {
-  const url = "/api";
-  const response = await fetch(url);
+  const BASE_URL = "/api";
+  const response = await fetch(BASE_URL);
   const result = await response.json();
   console.log(result);
 }
