@@ -54,4 +54,4 @@ async def main():
 @app.get("/api/tracts")
 async def census_tract(state_abbr: str):
     tracts = get_all_census_tracts(state_abbr)
-    return await tracts
+    return tracts

@@ -7,7 +7,7 @@ class Geometry:
 
 
 class Tract(BaseModel):
-    # gid: int
+    gid: int
     statefp: str
     countyfp: str
     tractce: str

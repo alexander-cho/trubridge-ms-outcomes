@@ -28,6 +28,7 @@ def get_census_tract_data() -> list[CdcPlacesOutcomeResponse] | None:
         return validated_res
     except ValidationError as e:
         print(e)
+        return None
 
 
 def insert_cdc_data():
