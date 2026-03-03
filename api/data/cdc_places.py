@@ -4,13 +4,13 @@ from dotenv import load_dotenv
 from pydantic import ValidationError, TypeAdapter
 from sqlalchemy import text
 
-from data.database import engine
+from data.db_engine import engine
 from dtos.cdc_outcomes import CdcPlacesOutcomeResponse
 
 load_dotenv()
 
 
-def get_census_tract_data() -> list[CdcPlacesOutcomeResponse] | None:
+def get_health_outcomes_data() -> list[CdcPlacesOutcomeResponse] | None:
     url = "https://data.cdc.gov/resource/cwsq-ngmh.json"
     params = {
         "$limit": 50000,
@@ -32,7 +32,7 @@ def get_census_tract_data() -> list[CdcPlacesOutcomeResponse] | None:
 
 
 def insert_cdc_data():
-    census_tract_data = get_census_tract_data()
+    health_outcomes_data = get_health_outcomes_data()
 
     insert_stmt = text("""
                        INSERT INTO health_outcomes (year, state_abbr, state_desc, county_name, county_fips,
@@ -50,7 +50,7 @@ def insert_cdc_data():
                        """)
 
     with engine.connect() as connection:
-        for outcome in census_tract_data:
+        for outcome in health_outcomes_data:
             connection.execute(insert_stmt, {
                 "year": outcome.year,
                 "state_abbr": outcome.stateabbr,

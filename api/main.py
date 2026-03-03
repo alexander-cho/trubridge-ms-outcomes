@@ -7,8 +7,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 
 from data.cdc_places import insert_cdc_data
-from data.database import engine, wait_for_db
-from services.tracts import get_all_census_tracts
+from data.census import insert_vehicle_data, insert_internet_data
+from data.db_engine import engine, wait_for_db
+from services.tracts import get_all_census_tracts, get_one_tract_info
 
 load_dotenv()
 
@@ -26,6 +27,8 @@ async def lifespan(_app: FastAPI):
             pass
         else:
             insert_cdc_data()
+            insert_vehicle_data()
+            insert_internet_data()
 
     yield
 
@@ -52,6 +55,10 @@ async def main():
 
 
 @app.get("/api/tracts")
-async def census_tract(state_abbr: str):
-    tracts = get_all_census_tracts(state_abbr)
-    return tracts
+async def census_tract(state_fp: str):
+    return get_all_census_tracts(state_fp)
+
+
+@app.get("/api/tract")
+async def get_tract_info(tract_id: str):
+    return get_one_tract_info(tract_id)

@@ -34,3 +34,8 @@ https://hub.docker.com/_/postgres ("Initialization Scripts" section)
 https://trvrm.github.io/efficient-postgres-bulk-inserts-take-2.html
 
 - .
+
+
+## ETL vs ELT
+
+https://www.reddit.com/r/dataengineering/comments/ycqulb/comment/ito1gqq/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button

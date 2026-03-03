@@ -2,22 +2,32 @@
 
 ### How do the dual barriers of limited transportation mobility and digital connectivity correlate with predicted 'No-Show' risks and associated financial losses for rural health centers managing high-diabetes populations across Mississippi census tracts?
 
-### How to run
+## Datasets used
 
-Clone the GitHub repository.
+- CDC PLACES, Census Tract, 2025 Release: https://data.cdc.gov/500-Cities-Places/PLACES-Local-Data-for-Better-Health-Census-Tract-D/cwsq-ngmh/about_data
+- 2025 TIGER/Line® Shapefiles: Census Tracts: https://www.census.gov/cgi-bin/geo/shapefiles/index.php?year=2025&layergroup=Census+Tracts
+- American Community Survey 5-Year Data (2009-2024): https://www.census.gov/data/developers/data-sets/acs-5year.html
+  - B08201: Household Size by Vehicles Available https://api.census.gov/data/2024/acs/acs5/groups/B08201.html
+  - asdf
 
-# Run this application with docker
+## Run this application with docker
 
-Make sure you have docker installed locally. Then, from the repository root run the command:
+`SOCRATA_APP_TOKEN` and `CENSUS_API_KEY` are still required, to be declared in `/api/.env`.
+
+https://evergreen.data.socrata.com/signup
+
+https://api.census.gov/data/key_signup.html
+
+Clone the repository. Make sure you have docker installed locally. Then, from the repository root run the command:
 ```shell
 docker compose up -d
 ```
 
 Once all containers are created: head to: `http://localhost:3010`
 
-# Run this application locally for development
+## Run this application locally for development
 
-Make sure you have python 3.14 and node 24 installed locally (`.python-version`, `.node-version`). There are a number of ways to do this,
+Clone the repository. Make sure you have python 3.14 and node 24 installed locally (`.python-version`, `.node-version`). There are a number of ways to do this,
 the most widely recommended methods being `pyenv` and `nvm` (node version manager), respectively.
 
 ##### Set up supporting services and other requirements
