@@ -9,6 +9,7 @@ from sqlalchemy import text
 from data.cdc_places import insert_cdc_data
 from data.census import insert_vehicle_data, insert_internet_data
 from data.db_engine import engine, wait_for_db
+from schemas.tract import TractOut
 from services.tracts import get_all_census_tracts, get_one_tract_info
 
 load_dotenv()
@@ -50,15 +51,15 @@ app.add_middleware(
 
 
 @app.get("/api")
-async def main():
+def main():
     return {"message": "Hello from TruBridge MS Outcomes"}
 
 
-@app.get("/api/tracts")
-async def census_tract(state_fp: str):
-    return get_all_census_tracts(state_fp)
+@app.get("/api/tracts", response_model=list[TractOut])
+def census_tract(state_fp: str, tolerance: float):
+    return get_all_census_tracts(state_fp, tolerance)
 
 
 @app.get("/api/tract")
-async def get_tract_info(tract_id: str):
+def get_tract_info(tract_id: str):
     return get_one_tract_info(tract_id)
