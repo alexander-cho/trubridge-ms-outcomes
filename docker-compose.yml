@@ -19,7 +19,7 @@ services:
   api:
     container_name: trubridge-api
     environment:
-      - DB_CONNECTION_STRING=postgresql://postgres:postgres@sql:5432/trubridge-ms-outcomes-db
+      - DB_CONNECTION_STRING=postgresql+asyncpg://postgres:postgres@sql:5432/trubridge-ms-outcomes-db
     build:
       context: api
       dockerfile: api.Dockerfile
