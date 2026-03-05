@@ -80,5 +80,5 @@ async def insert_cdc_data():
         for outcome in health_outcomes_data
     ]
 
-    async with engine.connect() as conn:
+    async with engine.begin() as conn:
         await conn.execute(insert_stmt, rows)
