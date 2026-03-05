@@ -1,6 +1,6 @@
 import os
 
-import requests
+import aiohttp
 from dotenv import load_dotenv
 import polars
 from sqlalchemy import text
@@ -12,7 +12,7 @@ from dtos.census_dtos import VehicleAvailabilityIn, InternetSubscriptionsIn
 load_dotenv()
 
 
-def get_census_table(_get, _for, _in):
+async def get_census_table(_get, _for, _in):
     """
     Query the Census API using a Census API key.
     :param _get:
@@ -31,17 +31,19 @@ def get_census_table(_get, _for, _in):
         'key': api_key
     }
 
-    res = requests.get(url, params=params).json()
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url, params=params) as res:
+            parsed_data = await res.json()
 
-    col_names, data = res[0], res[1:]
+    col_names, data = parsed_data[0], parsed_data[1:]
 
     df = polars.DataFrame(data=data, schema=col_names, orient="row")
 
     return df.write_json()
 
 
-def insert_vehicle_data():
-    ct = get_census_table('NAME,B08201_001E,B08201_002E', 'tract:*', 'state:28')
+async def insert_vehicle_data():
+    ct = await get_census_table('NAME,B08201_001E,B08201_002E', 'tract:*', 'state:28')
 
     ta = TypeAdapter(list[VehicleAvailabilityIn])
     validated_ct = ta.validate_json(ct)
@@ -51,20 +53,22 @@ def insert_vehicle_data():
                        VALUES (:tract_name, :total_households, :total_households_no_vehicle, :tract_id)
                        """)
 
-    with engine.connect() as connection:
-        for obj in validated_ct:
-            connection.execute(insert_stmt, {
-                "tract_name": obj.NAME,
-                "total_households": obj.B08201_001E,
-                "total_households_no_vehicle": obj.B08201_002E,
-                "tract_id": obj.state + obj.county + obj.tract
-            })
+    rows = [
+        {
+            "tract_name": obj.NAME,
+            "total_households": obj.B08201_001E,
+            "total_households_no_vehicle": obj.B08201_002E,
+            "tract_id": obj.state + obj.county + obj.tract
+        }
+        for obj in validated_ct
+    ]
 
-        connection.commit()
+    async with engine.begin() as conn:
+        await conn.execute(insert_stmt, rows)
 
 
-def insert_internet_data():
-    ct = get_census_table('NAME,B28002_001E,B28002_013E', 'tract:*', 'state:28')
+async def insert_internet_data():
+    ct = await get_census_table('NAME,B28002_001E,B28002_013E', 'tract:*', 'state:28')
 
     ta = TypeAdapter(list[InternetSubscriptionsIn])
     validated_ct = ta.validate_json(ct)
@@ -74,13 +78,15 @@ def insert_internet_data():
                        VALUES (:tract_name, :total_households, :total_households_no_internet_access, :tract_id)
                        """)
 
-    with engine.connect() as connection:
-        for obj in validated_ct:
-            connection.execute(insert_stmt, {
-                "tract_name": obj.NAME,
-                "total_households": obj.B28002_001E,
-                "total_households_no_internet_access": obj.B28002_013E,
-                "tract_id": obj.state + obj.county + obj.tract
-            })
+    rows = [
+        {
+            "tract_name": obj.NAME,
+            "total_households": obj.B28002_001E,
+            "total_households_no_internet_access": obj.B28002_013E,
+            "tract_id": obj.state + obj.county + obj.tract
+        }
+        for obj in validated_ct
+    ]
 
-        connection.commit()
+    async with engine.begin() as conn:
+        await conn.execute(insert_stmt, rows)
