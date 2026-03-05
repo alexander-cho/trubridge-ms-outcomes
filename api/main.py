@@ -1,3 +1,4 @@
+# import asyncio
 import os
 from contextlib import asynccontextmanager
 
@@ -17,19 +18,25 @@ load_dotenv()
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
-    wait_for_db(os.getenv('DB_CONNECTION_STRING'))
+    await wait_for_db(os.getenv('DB_CONNECTION_STRING'))
 
     # seed only if HealthOutcomes table is empty
-    with engine.connect() as connection:
-        statement = connection.execute(text("SELECT * FROM health_outcomes LIMIT 1"))
+    async with engine.connect() as conn:
+        statement = await conn.execute(text("SELECT 1 FROM health_outcomes LIMIT 1"))
         exists = statement.scalar_one_or_none() is not None
 
         if exists:
             pass
         else:
-            insert_cdc_data()
-            insert_vehicle_data()
-            insert_internet_data()
+            await insert_cdc_data()
+            await insert_vehicle_data()
+            await insert_internet_data()
+
+            # await asyncio.gather(
+            #     insert_cdc_data(),
+            #     insert_vehicle_data(),
+            #     insert_internet_data()
+            # )
 
     yield
 
@@ -56,10 +63,10 @@ def main():
 
 
 @app.get("/api/tracts", response_model=list[TractOut])
-def census_tract(state_fp: str, tolerance: float):
-    return get_all_census_tracts(state_fp, tolerance)
+async def census_tract(state_fp: str, tolerance: float):
+    return await get_all_census_tracts(state_fp, tolerance)
 
 
 @app.get("/api/tract")
-def get_tract_info(tract_id: str):
-    return get_one_tract_info(tract_id)
+async def get_tract_info(tract_id: str):
+    return await get_one_tract_info(tract_id)
