@@ -8,11 +8,11 @@
 - 2025 TIGER/Line® Shapefiles: Census Tracts: https://www.census.gov/cgi-bin/geo/shapefiles/index.php?year=2025&layergroup=Census+Tracts
 - American Community Survey 5-Year Data (2009-2024): https://www.census.gov/data/developers/data-sets/acs-5year.html
   - B08201: Household Size by Vehicles Available https://api.census.gov/data/2024/acs/acs5/groups/B08201.html
-  - asdf
+  - B28002: Presence and Types of Internet Subscriptions in Household https://api.census.gov/data/2024/acs/acs5/groups/B28002.html
 
 ## Run this application with docker
 
-`SOCRATA_APP_TOKEN` and `CENSUS_API_KEY` are still required, to be declared in `/api/.env`.
+`SOCRATA_APP_TOKEN` and `CENSUS_API_KEY` are still required, to be declared in `/api/.env` in the same manner as `/api/.env.example`.
 
 https://evergreen.data.socrata.com/signup
 
