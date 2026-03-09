@@ -1,6 +1,10 @@
 # Health Outcomes and Social Determinants
 
-### How do the dual barriers of limited transportation mobility and digital connectivity correlate with predicted 'No-Show' risks and associated financial losses for rural health centers managing high-diabetes populations across Mississippi census tracts?
+### Which Mississippi census tracts exhibit the greatest structural vulnerability to missed or delayed healthcare based on social determinants and health outcomes?
+
+Missed or delayed healthcare appointments create both clinical risks for patients and huge financial losses 
+($150 billion annually, nationwide) for healthcare providers. Identifying communities structurally vulnerable to missed 
+care can help health systems anticipate where appointment gaps and associated revenue losses are most likely to occur.
 
 ## Datasets used
 
