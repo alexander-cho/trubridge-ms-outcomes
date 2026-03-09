@@ -9,6 +9,8 @@
 - American Community Survey 5-Year Data (2009-2024): https://www.census.gov/data/developers/data-sets/acs-5year.html
   - B08201: Household Size by Vehicles Available https://api.census.gov/data/2024/acs/acs5/groups/B08201.html
   - B28002: Presence and Types of Internet Subscriptions in Household https://api.census.gov/data/2024/acs/acs5/groups/B28002.html
+  - B17001: Poverty Status in the Past 12 Months https://api.census.gov/data/2024/acs/acs5/groups/B17001.html
+  - S2701: Health Insurance Coverage Characteristics https://api.census.gov/data/2024/acs/acs5/subject/groups/S2701.html
 
 ## Run this application with docker
 

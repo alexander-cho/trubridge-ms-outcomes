@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 
 from data.cdc_places import insert_cdc_data
-from data.census import insert_vehicle_data, insert_internet_data
+from data.census import insert_vehicle_data, insert_internet_data, insert_insurance_data, insert_poverty_data
 from data.db_engine import engine, wait_for_db
 from schemas.tract import TractOut
 from services.tracts import get_all_census_tracts, get_one_tract_info
@@ -31,6 +31,8 @@ async def lifespan(_app: FastAPI):
             await insert_cdc_data()
             await insert_vehicle_data()
             await insert_internet_data()
+            await insert_poverty_data()
+            await insert_insurance_data()
 
             # await asyncio.gather(
             #     insert_cdc_data(),

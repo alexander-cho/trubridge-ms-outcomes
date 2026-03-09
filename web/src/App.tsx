@@ -1,12 +1,12 @@
 import './App.css';
-import Map from "./features/map/map.tsx";
+import MapComponent from "./features/map/map-component.tsx";
 
 
 function App() {
 
   return (
     <>
-      <Map></Map>
+      <MapComponent></MapComponent>
     </>
   );
 }
