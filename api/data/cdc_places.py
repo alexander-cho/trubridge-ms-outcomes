@@ -49,7 +49,7 @@ async def insert_cdc_data():
                                :data_value, :low_confidence_limit, :high_confidence_limit,
                                :total_population, :total_adult_population, :longitude, :latitude,
                                :census_tract_id, :category_id, :measure_id, :data_value_type_id,
-                               :short_question_text)
+                               :short_question_text);
                        """)
 
     rows = [

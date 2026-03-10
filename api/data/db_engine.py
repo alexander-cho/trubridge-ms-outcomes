@@ -18,7 +18,7 @@ async def wait_for_db(db_uri):
     while not up:
         try:
             async with _local_engine.connect() as conn:
-                await conn.execute(text("SELECT 1"))
+                await conn.execute(text("SELECT 1;"))
         except Exception as err:
             print(f"Connection error: {err}")
             up = False

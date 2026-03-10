@@ -11,7 +11,7 @@ from data.cdc_places import insert_cdc_data
 from data.census import insert_vehicle_data, insert_internet_data, insert_insurance_data, insert_poverty_data
 from data.db_engine import engine, wait_for_db
 from schemas.tract import TractOut
-from services.tracts import get_all_census_tracts, get_one_tract_info
+from services.tracts import get_all_census_tracts, get_one_tract_info, get_full_tract_info
 
 load_dotenv()
 
@@ -22,7 +22,7 @@ async def lifespan(_app: FastAPI):
 
     # seed only if HealthOutcomes table is empty
     async with engine.connect() as conn:
-        statement = await conn.execute(text("SELECT 1 FROM health_outcomes LIMIT 1"))
+        statement = await conn.execute(text("SELECT 1 FROM health_outcomes LIMIT 1;"))
         exists = statement.scalar_one_or_none() is not None
 
         if exists:
@@ -33,6 +33,10 @@ async def lifespan(_app: FastAPI):
             await insert_internet_data()
             await insert_poverty_data()
             await insert_insurance_data()
+
+        await conn.execute(text("REFRESH MATERIALIZED VIEW tract_health_outcomes;"))
+        await conn.execute(text("REFRESH MATERIALIZED VIEW analytics;"))
+        await conn.commit()
 
             # await asyncio.gather(
             #     insert_cdc_data(),
@@ -73,4 +77,4 @@ async def census_tract(state_fp: str, tolerance: float):
 
 @app.get("/api/tract")
 async def get_tract_info(tract_id: str):
-    return await get_one_tract_info(tract_id)
+    return await get_full_tract_info(tract_id)

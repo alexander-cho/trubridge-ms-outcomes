@@ -51,7 +51,7 @@ async def insert_vehicle_data():
 
     insert_stmt = text("""
                        INSERT INTO vehicles_available (tract_name, total_households, total_households_no_vehicle, total_households_one_vehicle, tract_id)
-                       VALUES (:tract_name, :total_households, :total_households_no_vehicle, :total_households_one_vehicle, :tract_id)
+                       VALUES (:tract_name, :total_households, :total_households_no_vehicle, :total_households_one_vehicle, :tract_id);
                        """)
 
     rows = [
@@ -78,7 +78,7 @@ async def insert_internet_data():
     insert_stmt = text("""
                        INSERT INTO internet_subscriptions (tract_name, total_households,
                                                            total_households_no_internet_access, tract_id)
-                       VALUES (:tract_name, :total_households, :total_households_no_internet_access, :tract_id)
+                       VALUES (:tract_name, :total_households, :total_households_no_internet_access, :tract_id);
                        """)
 
     rows = [
@@ -104,7 +104,7 @@ async def insert_poverty_data():
     insert_stmt = text("""
                        INSERT INTO poverty (tract_name, total_population,
                                                            total_population_below_poverty_level, tract_id)
-                       VALUES (:tract_name, :total_population, :total_population_below_poverty_level, :tract_id)
+                       VALUES (:tract_name, :total_population, :total_population_below_poverty_level, :tract_id);
                        """)
 
     rows = [
@@ -130,7 +130,7 @@ async def insert_insurance_data():
     insert_stmt = text("""
                        INSERT INTO health_insurance (tract_name, total_population,
                                                            total_population_uninsured, tract_id)
-                       VALUES (:tract_name, :total_population, :total_population_uninsured, :tract_id)
+                       VALUES (:tract_name, :total_population, :total_population_uninsured, :tract_id);
                        """)
 
     rows = [

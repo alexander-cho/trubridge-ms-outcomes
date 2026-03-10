@@ -1,6 +1,6 @@
 # Health Outcomes and Social Determinants
 
-### Which Mississippi census tracts exhibit the greatest structural vulnerability to missed or delayed healthcare based on social determinants and health outcomes?
+### Which Mississippi census tracts exhibit the greatest structural vulnerability to missed or delayed healthcare based on social determinants of health and associated community health outcomes?
 
 Missed or delayed healthcare appointments create both clinical risks for patients and huge financial losses 
 ($150 billion annually, nationwide) for healthcare providers. Identifying communities structurally vulnerable to missed 
