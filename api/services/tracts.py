@@ -3,12 +3,12 @@ from sqlalchemy import text
 from data.db_engine import engine
 
 
-async def get_all_census_tracts(state_fp: str, tolerance: float):
+async def get_geometries(state_fp: str, tolerance: float):
     """
-    Get all tracts, for ex, default zoom at initial page load.
+    Get all tract geometries, for ex, default zoom at initial page load.
     :param tolerance:
     :param state_fp: the two-digit code to identify a U.S. state
-    :return: data on all tracts in a given state
+    :return: geometries and supporting data on all tracts in a given state
     """
     async with engine.connect() as conn:
         statement = await conn.execute(
@@ -23,23 +23,11 @@ async def get_all_census_tracts(state_fp: str, tolerance: float):
     return tracts
 
 
-async def get_one_tract_info(tract_id: str):
-    async with engine.connect() as conn:
-        statement = await conn.execute(
-            text("SELECT * FROM vehicles_available JOIN internet_subscriptions ON vehicles_available.tract_id = internet_subscriptions.tract_id WHERE vehicles_available.tract_id = :tract_id;"),
-            {"tract_id": tract_id}
-        )
-
-        tract = statement.mappings().all()
-
-    return tract
-
-
-async def get_full_tract_info(tract_id: str):
+async def get_tract_data(tract_id: str):
     async with engine.connect() as conn:
         statement = await conn.execute(
             text(
-                "SELECT * FROM analytics WHERE census_tract_id = :tract_id;"),
+                "SELECT * FROM tract_analytics WHERE census_tract_id = :tract_id;"),
             {"tract_id": tract_id}
         )
 
