@@ -26,8 +26,7 @@ async def get_geometries(state_fp: str, tolerance: float):
 async def get_tract_data(tract_id: str):
     async with engine.connect() as conn:
         statement = await conn.execute(
-            text(
-                "SELECT * FROM tract_analytics WHERE census_tract_id = :tract_id;"),
+            text("SELECT * FROM tract_analytics WHERE census_tract_id = :tract_id;"),
             {"tract_id": tract_id}
         )
 

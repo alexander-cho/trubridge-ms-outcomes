@@ -5,3 +5,4 @@ sqlalchemy[asyncio]==2.0.48
 asyncpg==0.31.0
 polars==1.38.1
 python-dotenv==1.2.2
+numpy==2.4.3

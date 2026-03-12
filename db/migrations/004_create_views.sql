@@ -32,10 +32,17 @@ AS
 (
 SELECT t1.*,
        t2.tract_name,
-       (t2.total_population_uninsured::float / NULLIF(t2.total_population::float, 0))           AS uninsured,
-       (t3.total_households_no_internet_access::float / NULLIF(t3.total_households::float, 0))  AS no_internet_access,
-       (t4.total_population_below_poverty_level::float / NULLIF(t4.total_population::float, 0)) AS below_poverty,
-       (t5.total_households_no_vehicle::float / NULLIF(t5.total_households::float, 0))          AS no_vehicle
+       (t2.total_population_uninsured::float / NULLIF(t2.total_population::float, 0)) AS uninsured,
+       (CASE
+            WHEN t3.total_households_no_internet_access::int = 0 THEN 0.13392044917598508
+            ELSE t3.total_households_no_internet_access::float /
+                 NULLIF(t3.total_households::float, 0) END)                           AS no_internet_access,
+       (t4.total_population_below_poverty_level::float /
+        NULLIF(t4.total_population::float, 0))                                        AS below_poverty,
+       (CASE
+            WHEN t5.total_households_no_vehicle::int = 0 THEN 0.0731888041398808
+            ELSE t5.total_households_no_vehicle::float /
+                 NULLIF(t5.total_households::float, 0) END)                           AS no_vehicle
 FROM public.tract_health_outcomes t1
          JOIN public.health_insurance t2 ON t1.census_tract_id = t2.tract_id
          JOIN public.internet_subscriptions t3 ON t1.census_tract_id = t3.tract_id
@@ -43,3 +50,9 @@ FROM public.tract_health_outcomes t1
          JOIN public.vehicles_available t5 ON t1.census_tract_id = t5.tract_id
     )
 WITH NO DATA;
+
+
+
+-- Average values where it's zero are currently hardcoded with
+-- SELECT AVG(no_internet_access) FROM public.tract_analytics WHERE no_internet_access != 0;
+-- and the like...
