@@ -1,4 +1,4 @@
-# import asyncio
+import asyncio
 import os
 from contextlib import asynccontextmanager
 
@@ -7,6 +7,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 
+from analytics.analysis import get_vulnerability_scores_async
 from data.cdc_places import insert_cdc_data
 from data.census import insert_vehicle_data, insert_internet_data, insert_insurance_data, insert_poverty_data
 from data.db_engine import engine, wait_for_db
@@ -25,24 +26,19 @@ async def lifespan(_app: FastAPI):
         statement = await conn.execute(text("SELECT 1 FROM health_outcomes LIMIT 1;"))
         exists = statement.scalar_one_or_none() is not None
 
-        if exists:
-            pass
-        else:
-            await insert_cdc_data()
-            await insert_vehicle_data()
-            await insert_internet_data()
-            await insert_poverty_data()
-            await insert_insurance_data()
+        if not exists:
+            # like, await Task.WhenAll()
+            await asyncio.gather(
+                insert_cdc_data(),
+                insert_vehicle_data(),
+                insert_internet_data(),
+                insert_poverty_data(),
+                insert_insurance_data()
+            )
 
         await conn.execute(text("REFRESH MATERIALIZED VIEW tract_health_outcomes;"))
         await conn.execute(text("REFRESH MATERIALIZED VIEW tract_analytics;"))
         await conn.commit()
-
-            # await asyncio.gather(
-            #     insert_cdc_data(),
-            #     insert_vehicle_data(),
-            #     insert_internet_data()
-            # )
 
     yield
 
@@ -78,3 +74,8 @@ async def census_tract(state_fp: str, tolerance: float):
 @app.get("/api/tract")
 async def get_tract_info(tract_id: str):
     return await get_tract_data(tract_id)
+
+
+@app.get("/api/scores")
+async def get_vulnerability_scores():
+    return await get_vulnerability_scores_async()
